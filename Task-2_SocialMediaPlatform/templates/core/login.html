@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Log In to ConnectHub{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <!-- Header -->
+    <div class="auth-header">
+      <div class="brand-icon" style="margin: 0 auto 0.75rem; width:48px; height:48px; border-radius:12px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">Log in to view your feed, connect with creators, and share stories.</p>
+    </div>
+
+    <!-- Body -->
+    <div class="auth-body">
+      <form action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST" id="login-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="form-label" for="id_username">Username or Email</label>
+          {{ form.username }}
+          {% if form.username.errors %}<div class="form-error-msg">{{ form.username.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label class="form-label" for="id_password">Password</label>
+          </div>
+          {{ form.password }}
+          {% if form.password.errors %}<div class="form-error-msg">{{ form.password.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;">
+          {{ form.remember_me }}
+          <label for="id_remember_me" style="font-size:0.85rem; color:var(--text-secondary); cursor:pointer;">
+            Keep me logged in
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="padding:0.75rem;" id="login-submit-btn">
+          Sign In
+        </button>
+      </form>
+
+      <!-- 1-Click Demo Evaluator Accounts -->
+      <div class="demo-accounts-box">
+        <div class="demo-title">⚡ 1-Click Demo Accounts (Instant Login)</div>
+        <div class="demo-buttons-grid">
+          <a href="{% url 'login' %}?demo=alex_tech" class="demo-login-chip" title="Login as Alex Rivera">
+            <span style="font-size:1.1rem;">💻</span>
+            <div>
+              <div>Alex (Tech)</div>
+              <small style="color:var(--text-muted); font-size:0.7rem;">@alex_tech</small>
+            </div>
+          </a>
+          <a href="{% url 'login' %}?demo=sarah_designs" class="demo-login-chip" title="Login as Sarah Chen">
+            <span style="font-size:1.1rem;">🎨</span>
+            <div>
+              <div>Sarah (Design)</div>
+              <small style="color:var(--text-muted); font-size:0.7rem;">@sarah_designs</small>
+            </div>
+          </a>
+          <a href="{% url 'login' %}?demo=marcus_travels" class="demo-login-chip" title="Login as Marcus Vance">
+            <span style="font-size:1.1rem;">✈️</span>
+            <div>
+              <div>Marcus (Travel)</div>
+              <small style="color:var(--text-muted); font-size:0.7rem;">@marcus_travels</small>
+            </div>
+          </a>
+          <a href="{% url 'login' %}?demo=admin" class="demo-login-chip" title="Login as Admin">
+            <span style="font-size:1.1rem;">👑</span>
+            <div>
+              <div>Admin</div>
+              <small style="color:var(--text-muted); font-size:0.7rem;">@admin</small>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer switch -->
+      <div style="text-align:center; margin-top:1.75rem; font-size:0.88rem; color:var(--text-muted);">
+        Don't have an account? 
+        <a href="{% url 'register' %}" style="color:var(--primary-600); font-weight:700;">Create one now</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

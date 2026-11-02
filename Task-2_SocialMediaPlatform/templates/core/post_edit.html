@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Post — ConnectHub{% endblock %}
+
+{% block content %}
+<div class="layout-single-column" style="max-width: 620px;">
+  <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:var(--radius-xl); box-shadow:var(--shadow-sm); overflow:hidden;">
+    <div style="padding:1.5rem 2rem; border-bottom:1px solid var(--border-light); display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <h1 style="font-size:1.35rem; font-weight:800;">Edit Post</h1>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">
+          Update your caption or change the post image.
+        </p>
+      </div>
+      <a href="{% url 'post_detail' post.id %}" class="btn btn-secondary btn-sm">Cancel</a>
+    </div>
+
+    <form action="{% url 'post_edit' post.id %}" method="POST" enctype="multipart/form-data" style="padding:2rem;" id="post-edit-form">
+      {% csrf_token %}
+
+      <!-- Current Image Preview -->
+      <div class="form-group">
+        <label class="form-label">Current Photo</label>
+        <div style="border-radius:var(--radius-md); overflow:hidden; max-height:280px; background:#000;">
+          <img src="{{ post.image.url }}" alt="Current post photo" style="width:100%; max-height:280px; object-fit:cover;">
+        </div>
+      </div>
+
+      <!-- Replace Photo (Optional) -->
+      <div class="form-group">
+        <label class="form-label" for="edit-post-image-input">Replace Photo (Optional)</label>
+        <input type="file" name="image" id="edit-post-image-input" class="form-input" accept="image/*">
+        <span class="form-hint">Leave blank to keep current photo. Supported formats: JPG, PNG, WebP up to 5MB.</span>
+        {% if form.image.errors %}<div class="form-error-msg">{{ form.image.errors.0 }}</div>{% endif %}
+      </div>
+
+      <!-- Caption -->
+      <div class="form-group">
+        <label class="form-label" for="edit-post-caption-input">Caption</label>
+        <textarea 
+          name="caption" 
+          id="edit-post-caption-input" 
+          class="form-input resize-none" 
+          rows="4" 
+          placeholder="Write a caption... Include #hashtags to increase reach"
+        >{{ form.caption.value|default:'' }}</textarea>
+        {% if form.caption.errors %}<div class="form-error-msg">{{ form.caption.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--border-light);">
+        <a href="{% url 'post_detail' post.id %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" id="save-post-edit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Update Post</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

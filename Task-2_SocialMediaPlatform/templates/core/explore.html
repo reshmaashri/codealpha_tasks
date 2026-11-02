@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Explore Trending &amp; Creators — ConnectHub{% endblock %}
+
+{% block content %}
+<div class="app-layout-container">
+  <!-- Left Column: Navigation -->
+  {% include 'core/components/left_sidebar.html' %}
+
+  <!-- Center Column: Explore Grid -->
+  <main class="center-feed" style="max-width: 100%;">
+    <!-- Explore Header Card -->
+    <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:var(--radius-xl); padding:1.5rem 1.75rem; box-shadow:var(--shadow-xs);">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+        <div>
+          <h1 style="font-size:1.5rem; font-weight:800;">Explore Community</h1>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">
+            Discover trending visual stories, talented creators, and inspiring discussions.
+          </p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <a href="{% url 'explore' %}" class="btn btn-secondary btn-sm {% if not tag_filter and not search_query %}btn-primary{% endif %}">
+            All Posts
+          </a>
+        </div>
+      </div>
+
+      <!-- Trending Tags Bar -->
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Popular:</span>
+        {% for tag in trending_tags %}
+          <a href="{% url 'explore' %}?tag={{ tag }}" class="trending-tag-badge {% if tag_filter == tag %}active{% endif %}">
+            #{{ tag }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Explore Posts Stream or Grid -->
+    {% if posts %}
+      <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:var(--feed-max-width); margin:0 auto; width:100%;">
+        {% for post in posts %}
+          {% include 'core/components/post_card.html' with post=post %}
+        {% endfor %}
+      </div>
+    {% else %}
+      {% include 'core/components/empty_feed.html' %}
+    {% endif %}
+  </main>
+
+  <!-- Right Column: Who to Follow & Stats -->
+  {% include 'core/components/right_sidebar.html' %}
+</div>
+{% endblock %}

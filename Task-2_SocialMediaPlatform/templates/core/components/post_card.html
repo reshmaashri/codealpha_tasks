@@ -1,0 +1,190 @@
+<article class="post-card" id="post-{{ post.id }}">
+  <!-- Post Header -->
+  <div class="post-header">
+    <div class="post-author-info">
+      <a href="{% url 'profile_user' post.author.username %}">
+        <img src="{{ post.author.profile.get_avatar_url }}" class="user-avatar-md" alt="{{ post.author.username }}">
+      </a>
+      <div class="post-author-names">
+        <a href="{% url 'profile_user' post.author.username %}" class="post-author-name">
+          <span>{{ post.author.profile.display_name }}</span>
+          {% if post.author.is_staff %}
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#4F46E5" style="vertical-align: middle;">
+              <path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z"/>
+            </svg>
+          {% endif %}
+        </a>
+        <div class="post-meta-line">
+          <span>@{{ post.author.username }}</span>
+          <span>&bull;</span>
+          <span>{{ post.created_at|timesince }} ago</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropdown menu for post author -->
+    {% if user.is_authenticated and user == post.author %}
+      <div class="post-header-menu-container">
+        <button type="button" class="post-header-menu-btn" title="Post options" id="post-options-btn-{{ post.id }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="19" cy="12" r="1"/>
+            <circle cx="5" cy="12" r="1"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu">
+          <a href="{% url 'post_edit' post.id %}" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span>Edit Post</span>
+          </a>
+          <form action="{% url 'post_delete' post.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this post?');">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item danger-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              <span>Delete Post</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Post Image -->
+  <div class="post-media-container">
+    <a href="{% url 'post_detail' post.id %}" style="width:100%; display:block;">
+      <img src="{{ post.image.url }}" class="post-image" alt="Post photo" loading="lazy">
+    </a>
+  </div>
+
+  <!-- Action Buttons (Like, Comment, Share) -->
+  <div class="post-actions-bar">
+    <div class="post-actions-left">
+      <!-- Like Button -->
+      {% if user.is_authenticated %}
+        <button 
+          type="button" 
+          class="action-btn like-btn {% if post.is_liked_by_current_user %}liked{% endif %}" 
+          data-post-id="{{ post.id }}"
+          id="like-btn-{{ post.id }}"
+          title="Like post"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span id="likes-count-{{ post.id }}">{{ post.likes.count }}</span>
+        </button>
+      {% else %}
+        <a href="{% url 'login' %}?next={{ request.path }}" class="action-btn" title="Log in to like">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span>{{ post.likes.count }}</span>
+        </a>
+      {% endif %}
+
+      <!-- Comment Count / Jump Button -->
+      <a href="{% url 'post_detail' post.id %}#comments" class="action-btn" title="Comments">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>{{ post.comments.count }}</span>
+      </a>
+
+      <!-- Share Button -->
+      <button type="button" class="action-btn share-btn" data-post-id="{{ post.id }}" title="Share Post Link">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+      </button>
+    </div>
+
+    <div>
+      <a href="{% url 'post_detail' post.id %}" style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">
+        View Detail &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Post Body (Caption & Hashtags) -->
+  <div class="post-body">
+    {% if post.caption %}
+      <div class="post-caption-text">
+        <a href="{% url 'profile_user' post.author.username %}" class="post-caption-author">
+          {{ post.author.username }}
+        </a>
+        <span>{{ post.get_caption_with_hashtags }}</span>
+      </div>
+    {% endif %}
+    <div class="post-date-muted">{{ post.created_at|date:"F j, Y, g:i a" }}</div>
+  </div>
+
+  <!-- Comments Container -->
+  <div class="post-comments-container">
+    {% if post.comments.count > 2 %}
+      <a href="{% url 'post_detail' post.id %}" class="view-all-comments-btn">
+        View all {{ post.comments.count }} comments
+      </a>
+    {% endif %}
+
+    <div class="comments-list">
+      {% for comment in post.comments.all|slice:":3" %}
+        <div class="comment-item" id="comment-{{ comment.id }}">
+          <div class="comment-main">
+            <a href="{% url 'profile_user' comment.author.username %}">
+              <img src="{{ comment.author.profile.get_avatar_url }}" class="user-avatar-sm" alt="{{ comment.author.username }}">
+            </a>
+            <div class="comment-content">
+              <a href="{% url 'profile_user' comment.author.username %}" class="comment-author">
+                {{ comment.author.profile.display_name }}
+              </a>
+              <span>{{ comment.text }}</span>
+              <span class="comment-time">{{ comment.created_at|timesince }} ago</span>
+            </div>
+          </div>
+          {% if user.is_authenticated and user == comment.author or user == post.author %}
+            <button class="comment-delete-btn" onclick="deleteComment({{ comment.id }})" title="Delete comment">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          {% endif %}
+        </div>
+      {% empty %}
+        <div style="font-size:0.82rem; color:var(--text-light); padding:0.25rem 0;" class="empty-comments-text">
+          No comments yet. Start the conversation!
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Inline Comment Form -->
+    {% if user.is_authenticated %}
+      <form action="{% url 'comment_create' post.id %}" method="POST" class="add-comment-form">
+        {% csrf_token %}
+        <img src="{{ user.profile.get_avatar_url }}" class="user-avatar-sm" style="width:30px; height:30px;" alt="Avatar">
+        <input 
+          type="text" 
+          name="text" 
+          class="comment-input" 
+          placeholder="Add a comment as @{{ user.username }}..." 
+          required 
+          autocomplete="off"
+        >
+        <button type="submit" class="comment-submit-btn">Post</button>
+      </form>
+    {% else %}
+      <div style="margin-top:0.65rem; font-size:0.85rem; color:var(--text-muted);">
+        <a href="{% url 'login' %}?next={{ request.path }}" style="color:var(--primary-600); font-weight:600;">Log in</a> to comment on this post.
+      </div>
+    {% endif %}
+  </div>
+</article>
