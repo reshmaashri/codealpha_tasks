@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - Product Catalog | All Products{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+
+  <!-- Page Breadcrumb & Header -->
+  <div style="margin-bottom: 2rem;">
+    <div style="font-size: 0.88rem; color: var(--slate-400); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+      <a href="{% url 'home' %}">Home</a> <i class="bi bi-chevron-right" style="font-size: 0.7rem;"></i>
+      <span style="color: var(--slate-800); font-weight: 600;">Products</span>
+      {% if selected_category %}
+        <i class="bi bi-chevron-right" style="font-size: 0.7rem;"></i>
+        <span style="color: var(--primary-600); font-weight: 700;">{{ selected_category.name }}</span>
+      {% endif %}
+    </div>
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em;">
+          {% if selected_category %}
+            {{ selected_category.name }}
+          {% elif search_query %}
+            Search Results for "{{ search_query }}"
+          {% else %}
+            Explore All Products
+          {% endif %}
+        </h1>
+        <p style="color: var(--slate-500); font-size: 0.95rem; margin-top: 0.25rem;">
+          Showing {{ total_count }} item{{ total_count|pluralize }} available with fast delivery
+        </p>
+      </div>
+
+      <!-- Sorting Selector -->
+      <form method="GET" action="{% url 'product_list' %}" style="display: flex; align-items: center; gap: 0.6rem;">
+        {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category.slug }}">{% endif %}
+        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+        {% if in_stock_only %}<input type="hidden" name="in_stock" value="1">{% endif %}
+
+        <label for="sortSelector" style="font-size: 0.9rem; font-weight: 600; color: var(--slate-600);">Sort by:</label>
+        <select name="sort" id="sortSelector" onchange="this.form.submit()" class="form-input" style="padding: 0.45rem 0.9rem; font-size: 0.9rem; width: auto; border-radius: var(--radius-sm); cursor: pointer;">
+          <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest Arrivals</option>
+          <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+          <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+          <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Product Name (A-Z)</option>
+        </select>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Pills Navigation -->
+  <div style="display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 2rem;">
+    <a href="{% url 'product_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: var(--radius-full); white-space: nowrap;">
+      All Categories
+    </a>
+    {% for cat in categories %}
+      <a href="{% url 'product_list' %}?category={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="btn btn-sm {% if selected_category.id == cat.id %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: var(--radius-full); white-space: nowrap;" id="filterCat-{{ cat.slug }}">
+        <i class="bi {{ cat.icon }}"></i> {{ cat.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Search & Active Filters Bar -->
+  {% if search_query or selected_category or in_stock_only %}
+    <div style="background: var(--primary-50); border: 1px solid var(--primary-200); border-radius: var(--radius-md); padding: 0.75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: var(--primary-700);">
+        <i class="bi bi-funnel"></i>
+        <span>Active Filters:</span>
+        {% if search_query %}
+          <span style="background: var(--white); border: 1px solid var(--primary-200); padding: 0.2rem 0.6rem; border-radius: var(--radius-sm); font-weight: 600;">Search: "{{ search_query }}"</span>
+        {% endif %}
+        {% if selected_category %}
+          <span style="background: var(--white); border: 1px solid var(--primary-200); padding: 0.2rem 0.6rem; border-radius: var(--radius-sm); font-weight: 600;">Category: {{ selected_category.name }}</span>
+        {% endif %}
+      </div>
+      <a href="{% url 'product_list' %}" style="font-size: 0.85rem; font-weight: 700; color: var(--rose-500);"><i class="bi bi-x-circle"></i> Clear All</a>
+    </div>
+  {% endif %}
+
+  <!-- Products Grid -->
+  {% if products %}
+    <div class="products-grid">
+      {% for product in products %}
+        <div class="product-card" id="catalogProductCard-{{ product.id }}">
+          <div class="product-thumb-wrap">
+            <div class="product-badges">
+              {% if product.discount_percentage > 0 %}
+                <span class="badge-discount">-{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+              {% if product.is_featured %}
+                <span class="badge-featured">FEATURED</span>
+              {% endif %}
+            </div>
+            <a href="{% url 'product_detail' slug=product.slug %}">
+              <img src="{{ product.get_image }}" alt="{{ product.name }}" class="product-thumb" loading="lazy">
+            </a>
+          </div>
+
+          <div class="product-info">
+            <div class="product-category-tag">{{ product.category.name }}</div>
+            <h3 class="product-title">
+              <a href="{% url 'product_detail' slug=product.slug %}">{{ product.name }}</a>
+            </h3>
+
+            <div class="product-rating">
+              <i class="bi bi-star-fill"></i>
+              <span class="rating-score">{{ product.rating }}</span>
+              <span class="rating-count">({{ product.review_count }})</span>
+              <span style="margin-left: auto; font-size: 0.78rem; font-weight: 600; color: {% if product.is_in_stock %}var(--emerald-600){% else %}var(--rose-500){% endif %};">
+                {% if product.is_in_stock %}In Stock{% else %}Sold Out{% endif %}
+              </span>
+            </div>
+
+            <div class="product-price-row">
+              <span class="price-current">${{ product.final_price }}</span>
+              {% if product.discount_price and product.discount_price < product.price %}
+                <span class="price-old">${{ product.price }}</span>
+              {% endif %}
+            </div>
+
+            <div class="product-card-actions">
+              <a href="{% url 'product_detail' slug=product.slug %}" class="btn btn-secondary btn-sm" id="catalogViewBtn-{{ product.id }}">
+                View Details
+              </a>
+
+              <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST" class="ajax-add-to-cart">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-primary btn-sm btn-full" id="catalogAddToCartBtn-{{ product.id }}" {% if not product.is_in_stock %}disabled{% endif %}>
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 4rem 1rem; background: var(--white); border-radius: var(--radius-xl); border: 1px solid var(--slate-200);">
+      <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--slate-100); color: var(--slate-400); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 1.5rem;">
+        <i class="bi bi-search"></i>
+      </div>
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--slate-800); margin-bottom: 0.5rem;">No matching products found</h3>
+      <p style="color: var(--slate-500); max-width: 440px; margin: 0 auto 1.5rem;">
+        We couldn't find any items matching your criteria. Try adjusting your search term or category filter.
+      </p>
+      <a href="{% url 'product_list' %}" class="btn btn-primary">
+        Reset All Filters
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

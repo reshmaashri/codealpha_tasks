@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ShopEase - Your Modern Lifestyle & Tech Store{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}ShopEase brings you curated tech gadgets, modern wearables, apparel, and lifestyle accessories with fast delivery.{% endblock %}">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons CDN for clean, crisp vector icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Main Custom Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span>✨ <strong>Welcome Offer:</strong> Free Express Shipping on orders over $50! Use code <strong>WELCOME10</strong> for 10% off</span>
+    <span class="badge-promo">PROMO</span>
+  </div>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <!-- Brand Logo -->
+      <a href="{% url 'home' %}" class="brand-logo" id="brandLogo">
+        <div class="brand-icon">
+          <i class="bi bi-bag-check-fill"></i>
+        </div>
+        <span>Shop</span>Ease
+      </a>
+
+      <!-- Search Bar -->
+      <form action="{% url 'product_list' %}" method="GET" class="nav-search-form" id="navSearchForm">
+        <div class="search-input-wrap">
+          <input type="text" name="q" placeholder="Search headphones, watches, laptops, shoes..." value="{{ search_query|default:'' }}" autocomplete="off" id="navSearchInput">
+          <button type="submit" class="search-btn" aria-label="Search" id="navSearchBtn">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="bi bi-house-door"></i> Home</a></li>
+        <li><a href="{% url 'product_list' %}" class="nav-link {% if request.resolver_match.url_name == 'product_list' and not selected_category %}active{% endif %}"><i class="bi bi-grid"></i> Products</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'my_orders' %}" class="nav-link {% if request.resolver_match.url_name == 'my_orders' %}active{% endif %}"><i class="bi bi-box-seam"></i> My Orders</a></li>
+        {% endif %}
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="nav-actions">
+        <!-- Cart Button -->
+        <a href="{% url 'cart' %}" class="cart-button-link" id="navCartBtn" aria-label="View Shopping Cart">
+          <i class="bi bi-cart3" style="font-size: 1.25rem;"></i>
+          <span class="cart-badge" id="cartBadge" {% if cart_item_count == 0 %}style="display:none;"{% endif %}>
+            {{ cart_item_count }}
+          </span>
+        </a>
+
+        <!-- User Authentication Links -->
+        {% if user.is_authenticated %}
+          <div class="user-menu-wrap">
+            <button class="user-btn" id="userMenuBtn" aria-label="User Account Menu">
+              <div class="user-avatar">{{ user.username|make_list|first|upper }}</div>
+              <span>{{ user.username }}</span>
+              <i class="bi bi-chevron-down" style="font-size: 0.75rem;"></i>
+            </button>
+            <div class="user-dropdown" id="userDropdownMenu">
+              <div style="padding: 0.5rem 0.85rem; font-size: 0.82rem; color: var(--slate-500);">
+                Signed in as <strong style="color: var(--slate-900);">{{ user.username }}</strong>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'my_orders' %}" class="dropdown-item"><i class="bi bi-receipt"></i> My Orders</a>
+              {% if user.is_staff %}
+                <a href="/admin/" target="_blank" class="dropdown-item"><i class="bi bi-shield-lock"></i> Django Admin</a>
+              {% endif %}
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'logout' %}" class="dropdown-item" style="color: var(--rose-500);"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+            </div>
+          </div>
+        {% else %}
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-sm" id="navLoginBtn"><i class="bi bi-person"></i> Log In</a>
+            <a href="{% url 'register' %}" class="btn btn-primary btn-sm" id="navRegisterBtn">Register</a>
+          </div>
+        {% endif %}
+
+        <!-- Mobile Toggle Button -->
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation Menu">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Server Flash Notifications -->
+  <div class="toast-container" id="toastContainer">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="toast {{ message.tags }}">
+          <div style="font-weight: 800; font-size: 1.1rem; line-height: 1;">
+            {% if message.tags == 'success' %}✓
+            {% elif message.tags == 'error' %}✕
+            {% elif message.tags == 'warning' %}⚠
+            {% else %}ℹ{% endif %}
+          </div>
+          <div style="flex: 1; font-size: 0.92rem; font-weight: 500;">{{ message }}</div>
+          <button style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #94A3B8;" onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- Main Body Content -->
+  <main style="flex: 1;">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-top">
+      <div class="footer-grid">
+        <!-- Brand Info -->
+        <div class="footer-col">
+          <div class="brand-logo" style="color: var(--white); margin-bottom: 1rem;">
+            <div class="brand-icon">
+              <i class="bi bi-bag-check-fill"></i>
+            </div>
+            <span>Shop</span>Ease
+          </div>
+          <p style="font-size: 0.92rem; color: var(--slate-400); line-height: 1.6; margin-bottom: 1.25rem;">
+            ShopEase is your trusted modern e-commerce destination for cutting-edge electronics, premium timepieces, athletic sneakers, and leather travel gear.
+          </p>
+          <div style="display: flex; gap: 0.75rem;">
+            <span style="display: inline-flex; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); align-items: center; justify-content: center; color: var(--white);"><i class="bi bi-facebook"></i></span>
+            <span style="display: inline-flex; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); align-items: center; justify-content: center; color: var(--white);"><i class="bi bi-twitter-x"></i></span>
+            <span style="display: inline-flex; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); align-items: center; justify-content: center; color: var(--white);"><i class="bi bi-instagram"></i></span>
+            <span style="display: inline-flex; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); align-items: center; justify-content: center; color: var(--white);"><i class="bi bi-github"></i></span>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'product_list' %}">All Products</a></li>
+            <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
+            <li><a href="{% url 'checkout' %}">Simulated Checkout</a></li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <ul class="footer-links">
+            {% for cat in nav_categories|slice:":5" %}
+              <li><a href="{% url 'product_list' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="footer-col">
+          <h4>Customer Care</h4>
+          <p style="font-size: 0.88rem; color: var(--slate-400); margin-bottom: 0.75rem;">
+            Questions or feedback? Our team is available 24/7.
+          </p>
+          <div style="font-size: 0.88rem; color: var(--slate-300); display: flex; flex-direction: column; gap: 0.4rem;">
+            <span><i class="bi bi-envelope" style="color: var(--primary-500);"></i> support@shopease.local</span>
+            <span><i class="bi bi-telephone" style="color: var(--emerald-500);"></i> +1 (800) 555-EASE</span>
+            <span><i class="bi bi-shield-check" style="color: var(--amber-500);"></i> 100% Simulated Safe Transactions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright -->
+    <div class="container footer-bottom">
+      <div>
+        © 2026 <strong>ShopEase Inc.</strong> All rights reserved. Built with Python Django & Vanilla Frontend.
+      </div>
+      <div style="display: flex; gap: 1rem; font-size: 1.3rem; color: var(--slate-400);">
+        <i class="bi bi-credit-card-2-front" title="Simulated Card Payment"></i>
+        <i class="bi bi-paypal" title="Simulated PayPal"></i>
+        <i class="bi bi-cash-coin" title="Cash on Delivery"></i>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

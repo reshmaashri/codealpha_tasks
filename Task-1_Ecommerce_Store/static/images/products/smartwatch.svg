@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowWatch" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F0FDF4"/>
+      <stop offset="100%" stop-color="#DCFCE7"/>
+    </radialGradient>
+    <linearGradient id="strapGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="dialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1E24"/>
+      <stop offset="100%" stop-color="#090A0F"/>
+    </linearGradient>
+    <filter id="watchShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowWatch)"/>
+  
+  <g filter="url(#watchShadow)" transform="translate(160, 50)">
+    <!-- Top Strap -->
+    <path d="M 60 0 L 220 0 L 205 150 L 75 150 Z" fill="url(#strapGrad)"/>
+    <!-- Bottom Strap -->
+    <path d="M 75 350 L 205 350 L 220 500 L 60 500 Z" fill="url(#strapGrad)"/>
+
+    <!-- Case Outline -->
+    <rect x="35" y="125" width="210" height="250" rx="55" fill="#334155"/>
+    <rect x="45" y="135" width="190" height="230" rx="45" fill="url(#dialGrad)" stroke="#475569" stroke-width="4"/>
+    
+    <!-- Crown Button -->
+    <rect x="245" y="195" width="14" height="45" rx="7" fill="#64748B"/>
+    <rect x="245" y="270" width="10" height="35" rx="5" fill="#475569"/>
+
+    <!-- Screen UI Elements -->
+    <text x="140" y="220" fill="#FFFFFF" font-family="system-ui, sans-serif" font-weight="800" font-size="52" text-anchor="middle">10:42</text>
+    <text x="140" y="250" fill="#10B981" font-family="system-ui, sans-serif" font-weight="600" font-size="16" text-anchor="middle">THU, OCT 28</text>
+    
+    <!-- Activity Rings -->
+    <circle cx="140" cy="305" r="32" fill="none" stroke="#1E293B" stroke-width="8"/>
+    <circle cx="140" cy="305" r="32" fill="none" stroke="#EF4444" stroke-width="8" stroke-dasharray="140 200" stroke-linecap="round"/>
+    <circle cx="140" cy="305" r="20" fill="none" stroke="#10B981" stroke-width="8" stroke-dasharray="90 150" stroke-linecap="round"/>
+  </g>
+</svg>

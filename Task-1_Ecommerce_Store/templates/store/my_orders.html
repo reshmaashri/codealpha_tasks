@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - My Orders{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+
+  <div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.4rem; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em;">
+      My Order History
+    </h1>
+    <p style="color: var(--slate-500); font-size: 0.95rem; margin-top: 0.25rem;">
+      Track and view all past orders placed with your ShopEase account
+    </p>
+  </div>
+
+  {% if orders %}
+    <div style="background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-sm);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200);">
+          <tr>
+            <th style="padding: 1.25rem 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Order Number</th>
+            <th style="padding: 1.25rem 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Date</th>
+            <th style="padding: 1.25rem 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Items</th>
+            <th style="padding: 1.25rem 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Status</th>
+            <th style="padding: 1.25rem 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Total</th>
+            <th style="padding: 1.25rem 1.5rem; text-align: right; font-size: 0.85rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr style="border-bottom: 1px solid var(--slate-100);">
+              <td style="padding: 1.25rem 1.5rem; font-weight: 800; color: var(--primary-600);">
+                {{ order.order_number }}
+              </td>
+              <td style="padding: 1.25rem 1.5rem; color: var(--slate-600); font-size: 0.92rem;">
+                {{ order.created_at|date:"M d, Y" }}
+              </td>
+              <td style="padding: 1.25rem 1.5rem; color: var(--slate-600); font-size: 0.92rem;">
+                {{ order.items.count }} item{{ order.items.count|pluralize }}
+              </td>
+              <td style="padding: 1.25rem 1.5rem;">
+                <span style="background: var(--emerald-light); color: var(--emerald-600); font-weight: 700; font-size: 0.8rem; padding: 0.25rem 0.65rem; border-radius: var(--radius-full);">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td style="padding: 1.25rem 1.5rem; font-weight: 800; color: var(--slate-900);">
+                ${{ order.total_amount }}
+              </td>
+              <td style="padding: 1.25rem 1.5rem; text-align: right;">
+                <a href="{% url 'order_confirmation' order_number=order.order_number %}" class="btn btn-secondary btn-sm">
+                  View Receipt <i class="bi bi-chevron-right"></i>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 4rem 1.5rem; text-align: center;">
+      <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--primary-50); color: var(--primary-600); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 1.5rem;">
+        <i class="bi bi-box2"></i>
+      </div>
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.5rem;">No orders found yet</h3>
+      <p style="color: var(--slate-500); max-width: 440px; margin: 0 auto 1.5rem;">
+        You haven't placed any orders with this account yet. Browse our catalog and experience our simulated checkout!
+      </p>
+      <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg">
+        Explore Products
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

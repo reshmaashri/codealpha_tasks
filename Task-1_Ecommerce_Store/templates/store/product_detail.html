@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+
+  <!-- Breadcrumb Navigation -->
+  <div style="font-size: 0.88rem; color: var(--slate-400); margin-bottom: 1.75rem; display: flex; align-items: center; gap: 0.5rem;">
+    <a href="{% url 'home' %}">Home</a> <i class="bi bi-chevron-right" style="font-size: 0.7rem;"></i>
+    <a href="{% url 'product_list' %}">Products</a> <i class="bi bi-chevron-right" style="font-size: 0.7rem;"></i>
+    <a href="{% url 'product_list' %}?category={{ product.category.slug }}">{{ product.category.name }}</a> <i class="bi bi-chevron-right" style="font-size: 0.7rem;"></i>
+    <span style="color: var(--slate-800); font-weight: 600;">{{ product.name }}</span>
+  </div>
+
+  <!-- Main Product Detail Layout -->
+  <div class="product-detail-layout">
+    <!-- Product Gallery / Image Viewer -->
+    <div class="detail-gallery-wrap">
+      <img src="{{ product.get_image }}" alt="{{ product.name }}" class="detail-img" id="detailProductImage">
+    </div>
+
+    <!-- Product Purchasing Info -->
+    <div class="detail-info-wrap">
+      <div class="detail-category-bread">
+        <span class="product-category-tag" style="margin: 0;">{{ product.category.name }}</span>
+        <span>•</span>
+        <div class="product-rating" style="margin: 0;">
+          <i class="bi bi-star-fill"></i>
+          <span class="rating-score">{{ product.rating }}</span>
+          <span class="rating-count">({{ product.review_count }} verified reviews)</span>
+        </div>
+      </div>
+
+      <h1 class="detail-title" id="productDetailTitle">{{ product.name }}</h1>
+
+      <!-- Pricing Row -->
+      <div class="detail-price-box">
+        <span class="detail-price-current">${{ product.final_price }}</span>
+        {% if product.discount_price and product.discount_price < product.price %}
+          <span style="font-size: 1.3rem; color: var(--slate-400); text-decoration: line-through;">${{ product.price }}</span>
+          <span class="badge-discount" style="font-size: 0.85rem; padding: 0.25rem 0.75rem;">Save {{ product.discount_percentage }}%</span>
+        {% endif %}
+
+        <div style="margin-left: auto;">
+          {% if product.is_in_stock %}
+            <span class="detail-stock-badge stock-in">
+              <i class="bi bi-check-circle-fill"></i> In Stock ({{ product.stock }} units left)
+            </span>
+          {% else %}
+            <span class="detail-stock-badge stock-out">
+              <i class="bi bi-x-circle-fill"></i> Currently Out of Stock
+            </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Description -->
+      <p class="detail-description">{{ product.description }}</p>
+
+      <!-- Key Highlights / Specs -->
+      <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--slate-800); margin-bottom: 0.6rem;">Key Product Features:</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.9rem; color: var(--slate-600);">
+          <li><i class="bi bi-check2" style="color: var(--emerald-600); font-weight: 800;"></i> Premium aerospace-grade materials & rigorous craftsmanship</li>
+          <li><i class="bi bi-check2" style="color: var(--emerald-600); font-weight: 800;"></i> Fully inspected and backed by ShopEase 2-Year Limited Warranty</li>
+          <li><i class="bi bi-check2" style="color: var(--emerald-600); font-weight: 800;"></i> Eligible for Free Express 2-Day Shipping</li>
+        </ul>
+      </div>
+
+      <!-- Add to Cart Form with Quantity Stepper -->
+      <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST" class="ajax-add-to-cart" id="detailAddToCartForm">
+        {% csrf_token %}
+        <div class="detail-actions-row">
+          <!-- Stepper -->
+          <div class="quantity-stepper">
+            <button type="button" class="stepper-btn btn-decrease" aria-label="Decrease quantity">−</button>
+            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="stepper-input" id="detailQtyInput">
+            <button type="button" class="stepper-btn btn-increase" aria-label="Increase quantity">+</button>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button type="submit" class="btn btn-primary btn-lg" style="flex: 1;" id="detailSubmitAddBtn" {% if not product.is_in_stock %}disabled{% endif %}>
+            <i class="bi bi-cart-plus-fill"></i> Add to Cart
+          </button>
+        </div>
+      </form>
+
+      <!-- Confidence Trust Badges -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; border-top: 1px solid var(--slate-100); padding-top: 1.5rem; text-align: center;">
+        <div style="padding: 0.5rem; font-size: 0.8rem; color: var(--slate-500);">
+          <i class="bi bi-truck" style="font-size: 1.2rem; color: var(--primary-600); display: block; margin-bottom: 0.3rem;"></i>
+          Fast Shipping
+        </div>
+        <div style="padding: 0.5rem; font-size: 0.8rem; color: var(--slate-500);">
+          <i class="bi bi-arrow-counterclockwise" style="font-size: 1.2rem; color: var(--primary-600); display: block; margin-bottom: 0.3rem;"></i>
+          30-Day Returns
+        </div>
+        <div style="padding: 0.5rem; font-size: 0.8rem; color: var(--slate-500);">
+          <i class="bi bi-shield-check" style="font-size: 1.2rem; color: var(--primary-600); display: block; margin-bottom: 0.3rem;"></i>
+          Simulated Safe
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products in Same Category -->
+  {% if related_products %}
+    <div style="margin-top: 4rem;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Related Items in {{ product.category.name }}</h2>
+          <p class="section-subtitle">Customers also viewed these popular alternatives</p>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        {% for rel in related_products %}
+          <div class="product-card" id="relProduct-{{ rel.id }}">
+            <div class="product-thumb-wrap">
+              {% if rel.discount_percentage > 0 %}
+                <div class="product-badges">
+                  <span class="badge-discount">-{{ rel.discount_percentage }}%</span>
+                </div>
+              {% endif %}
+              <a href="{% url 'product_detail' slug=rel.slug %}">
+                <img src="{{ rel.get_image }}" alt="{{ rel.name }}" class="product-thumb">
+              </a>
+            </div>
+            <div class="product-info">
+              <div class="product-category-tag">{{ rel.category.name }}</div>
+              <h3 class="product-title">
+                <a href="{% url 'product_detail' slug=rel.slug %}">{{ rel.name }}</a>
+              </h3>
+              <div class="product-price-row">
+                <span class="price-current">${{ rel.final_price }}</span>
+                {% if rel.discount_price and rel.discount_price < rel.price %}
+                  <span class="price-old">${{ rel.price }}</span>
+                {% endif %}
+              </div>
+              <a href="{% url 'product_detail' slug=rel.slug %}" class="btn btn-secondary btn-sm btn-full">
+                View Details
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

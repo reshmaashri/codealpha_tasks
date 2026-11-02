@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - Customer Login{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+
+  <div class="auth-wrapper">
+    <div class="auth-header">
+      <div class="brand-icon" style="margin: 0 auto 1.25rem; width: 48px; height: 48px; font-size: 1.4rem;">
+        <i class="bi bi-person-fill"></i>
+      </div>
+      <h2>Welcome Back</h2>
+      <p>Log in to access your cart, checkout, and track past orders</p>
+    </div>
+
+    <!-- Quick Demo Accounts Helper -->
+    <div style="background: var(--primary-50); border: 1px dashed var(--primary-300); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: var(--primary-700);">
+      <div style="font-weight: 700; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+        <i class="bi bi-lightbulb-fill"></i> Quick Demo Accounts (1-Click Fill):
+      </div>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem;">
+        <button type="button" class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.78rem;" onclick="fillDemo('customer', 'password123')">
+          👤 Customer Account
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.78rem;" onclick="fillDemo('admin', 'admin123')">
+          🛡️ Admin Account
+        </button>
+      </div>
+    </div>
+
+    <form method="POST" action="{% url 'login' %}{% if next %}?next={{ next }}{% endif %}" id="loginForm">
+      {% csrf_token %}
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="id_username">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="form-error-msg">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <label class="form-label" for="id_password">Password</label>
+        </div>
+        {{ form.password }}
+        {% if form.password.errors %}<div class="form-error-msg">{{ form.password.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-full" id="loginSubmitBtn">
+        <i class="bi bi-box-arrow-in-right"></i> Sign In
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-100); font-size: 0.92rem; color: var(--slate-500);">
+      Don't have an account yet?
+      <a href="{% url 'register' %}{% if next %}?next={{ next }}{% endif %}" style="color: var(--primary-600); font-weight: 700;" id="gotoRegisterLink">Create one now</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function fillDemo(username, password) {
+  document.getElementById('id_username').value = username;
+  document.getElementById('id_password').value = password;
+  showToast(`Auto-filled demo credentials for ${username}!`, 'info');
+}
+</script>
+{% endblock %}

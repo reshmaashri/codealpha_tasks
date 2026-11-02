@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - Create an Account{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+
+  <div class="auth-wrapper">
+    <div class="auth-header">
+      <div class="brand-icon" style="margin: 0 auto 1.25rem; width: 48px; height: 48px; font-size: 1.4rem;">
+        <i class="bi bi-person-plus-fill"></i>
+      </div>
+      <h2>Join ShopEase</h2>
+      <p>Create your free account to shop, track orders, and unlock member discounts</p>
+    </div>
+
+    <form method="POST" action="{% url 'register' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" id="registerForm">
+      {% csrf_token %}
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="id_username">Username *</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="form-error-msg">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="id_email">Email Address *</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="form-error-msg">{{ form.email.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" for="id_password">Password *</label>
+        {{ form.password }}
+        {% if form.password.errors %}<div class="form-error-msg">{{ form.password.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.75rem;">
+        <label class="form-label" for="id_confirm_password">Confirm Password *</label>
+        {{ form.confirm_password }}
+        {% if form.confirm_password.errors %}<div class="form-error-msg">{{ form.confirm_password.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-full" id="registerSubmitBtn">
+        <i class="bi bi-check2-circle"></i> Create Account
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-100); font-size: 0.92rem; color: var(--slate-500);">
+      Already have an account?
+      <a href="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" style="color: var(--primary-600); font-weight: 700;" id="gotoLoginLink">Sign in here</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

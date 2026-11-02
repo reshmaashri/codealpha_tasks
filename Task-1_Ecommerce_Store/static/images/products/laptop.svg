@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowLap" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </radialGradient>
+    <linearGradient id="aluminum" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="50%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+    <linearGradient id="screenWallpaper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <filter id="lapShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowLap)"/>
+  
+  <g filter="url(#lapShadow)" transform="translate(60, 110)">
+    <!-- Screen Lid -->
+    <rect x="70" y="20" width="340" height="225" rx="16" fill="#0F172A"/>
+    <!-- Glass Display -->
+    <rect x="82" y="32" width="316" height="198" rx="8" fill="url(#screenWallpaper)"/>
+    <!-- Web Camera dot -->
+    <circle cx="240" cy="26" r="3" fill="#334155"/>
+    <circle cx="240" cy="26" r="1" fill="#38BDF8"/>
+    <!-- Screen Accent Art -->
+    <circle cx="330" cy="110" r="50" fill="#FFFFFF" fill-opacity="0.15"/>
+    <path d="M 100 190 Q 200 100, 320 180 T 380 150" fill="none" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="3"/>
+
+    <!-- Bottom Base / Body -->
+    <path d="M 20 250 L 460 250 L 440 280 L 40 280 Z" fill="url(#aluminum)"/>
+    <rect x="180" y="252" width="120" height="6" rx="3" fill="#64748B"/>
+    <!-- Laptop Front Lip -->
+    <rect x="25" y="278" width="430" height="10" rx="4" fill="#94A3B8"/>
+  </g>
+</svg>

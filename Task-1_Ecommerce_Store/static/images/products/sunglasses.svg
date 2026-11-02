@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowSun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEFCE8"/>
+      <stop offset="100%" stop-color="#FEF08A"/>
+    </radialGradient>
+    <linearGradient id="lensGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="70%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="goldFrame" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="50%" stop-color="#EAB308"/>
+      <stop offset="100%" stop-color="#CA8A04"/>
+    </linearGradient>
+    <filter id="sunShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#854D0E" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowSun)"/>
+  
+  <g filter="url(#sunShadow)" transform="translate(60, 190)">
+    <!-- Bridge Bar Top -->
+    <path d="M 170 30 Q 240 10, 310 30" fill="none" stroke="url(#goldFrame)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 210 65 Q 240 55, 270 65" fill="none" stroke="url(#goldFrame)" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Left Teardrop Aviator Lens -->
+    <path d="M 60 40 C 180 30, 210 60, 210 130 C 210 200, 130 220, 80 160 C 50 120, 40 50, 60 40 Z" fill="url(#lensGrad)" stroke="url(#goldFrame)" stroke-width="8"/>
+    <!-- Glass Highlight Reflection -->
+    <path d="M 90 60 C 140 55, 170 80, 160 120" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Right Teardrop Aviator Lens -->
+    <path d="M 420 40 C 300 30, 270 60, 270 130 C 270 200, 350 220, 400 160 C 430 120, 440 50, 420 40 Z" fill="url(#lensGrad)" stroke="url(#goldFrame)" stroke-width="8"/>
+    <!-- Glass Highlight Reflection -->
+    <path d="M 390 60 C 340 55, 310 80, 320 120" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Frame Temple Hinges -->
+    <rect x="35" y="36" width="20" height="8" rx="4" fill="url(#goldFrame)"/>
+    <rect x="425" y="36" width="20" height="8" rx="4" fill="url(#goldFrame)"/>
+  </g>
+</svg>

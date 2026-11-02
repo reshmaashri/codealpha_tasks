@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ShopEase - Modern Lifestyle & Tech Store | Home{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Banner Section -->
+<section class="hero-section">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-tag">
+        <i class="bi bi-stars"></i> Curated Essentials for Modern Living
+      </div>
+      <h1 class="hero-title">
+        Discover Premium Gear <br>
+        <span class="gradient-text">Crafted for Excellence</span>
+      </h1>
+      <p class="hero-desc">
+        Explore studio headphones, luxury smartwatches, ultra-light laptops, and ergonomic running shoes. High performance meets minimalist aesthetic.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg" id="heroShopNowBtn">
+          <i class="bi bi-bag"></i> Explore Catalog
+        </a>
+        <a href="{% url 'product_list' %}?category=wearables" class="btn btn-secondary btn-lg" style="background: rgba(255, 255, 255, 0.1); color: var(--white); border-color: rgba(255, 255, 255, 0.2);" id="heroDealsBtn">
+          <i class="bi bi-smartwatch"></i> View Smartwatches
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero Card Showcase -->
+    <div class="hero-showcase-card">
+      <div class="hero-floating-badge">★ TOP RATED CHOICE</div>
+      <img src="{% static 'images/products/headphones.svg' %}" alt="Studio Pro Noise-Cancelling Headphones" class="hero-card-img" id="heroShowcaseImg">
+      <div style="text-align: left; background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.1);">
+        <div style="font-size: 0.8rem; color: #A5B4FC; font-weight: 700; text-transform: uppercase;">Featured Device</div>
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--white); margin: 0.2rem 0 0.5rem;">Studio Pro Wireless ANC</h3>
+        <div style="display: flex; align-items: baseline; gap: 0.75rem;">
+          <span style="font-size: 1.4rem; font-weight: 800; color: #34D399;">$199.99</span>
+          <span style="font-size: 0.95rem; color: #94A3B8; text-decoration: line-through;">$249.99</span>
+          <span style="margin-left: auto; font-size: 0.85rem; color: #FBBF24;"><i class="bi bi-star-fill"></i> 4.9 (128 reviews)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Value Propositions Strip -->
+<div class="container">
+  <div class="features-strip">
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon-wrap">
+          <i class="bi bi-truck"></i>
+        </div>
+        <div class="feature-text">
+          <h4>Free Express Shipping</h4>
+          <p>On all domestic orders over $50</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-wrap">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <div class="feature-text">
+          <h4>Secure Simulated Checkout</h4>
+          <p>Safe sandbox testing environment</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-wrap">
+          <i class="bi bi-arrow-repeat"></i>
+        </div>
+        <div class="feature-text">
+          <h4>30-Day Hassle-Free Returns</h4>
+          <p>Guaranteed customer satisfaction</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon-wrap">
+          <i class="bi bi-headset"></i>
+        </div>
+        <div class="feature-text">
+          <h4>24/7 Dedicated Support</h4>
+          <p>Live assistance whenever you need</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shop by Category Section -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">Find exactly what you need curated by our expert team</p>
+      </div>
+      <a href="{% url 'product_list' %}" class="view-all-link">
+        View All Categories <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="categories-grid">
+      {% for category in categories %}
+        <a href="{% url 'product_list' %}?category={{ category.slug }}" class="category-card" id="catCard-{{ category.slug }}">
+          <div class="cat-icon-circle">
+            <i class="bi {{ category.icon }}"></i>
+          </div>
+          <div class="cat-name">{{ category.name }}</div>
+          <div class="cat-count">{{ category.products.count }} items</div>
+        </a>
+      {% empty %}
+        <p>No categories available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="section" style="background: var(--white); border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200);">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked top performers with exclusive pricing and rave reviews</p>
+      </div>
+      <a href="{% url 'product_list' %}" class="view-all-link">
+        Explore All Products <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="products-grid">
+      {% for product in featured_products %}
+        <div class="product-card" id="productCard-{{ product.id }}">
+          <div class="product-thumb-wrap">
+            <div class="product-badges">
+              {% if product.discount_percentage > 0 %}
+                <span class="badge-discount">-{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+              {% if product.is_featured %}
+                <span class="badge-featured">FEATURED</span>
+              {% endif %}
+            </div>
+            <a href="{% url 'product_detail' slug=product.slug %}">
+              <img src="{{ product.get_image }}" alt="{{ product.name }}" class="product-thumb" loading="lazy">
+            </a>
+          </div>
+
+          <div class="product-info">
+            <div class="product-category-tag">{{ product.category.name }}</div>
+            <h3 class="product-title">
+              <a href="{% url 'product_detail' slug=product.slug %}">{{ product.name }}</a>
+            </h3>
+
+            <div class="product-rating">
+              <i class="bi bi-star-fill"></i>
+              <span class="rating-score">{{ product.rating }}</span>
+              <span class="rating-count">({{ product.review_count }})</span>
+            </div>
+
+            <div class="product-price-row">
+              <span class="price-current">${{ product.final_price }}</span>
+              {% if product.discount_price and product.discount_price < product.price %}
+                <span class="price-old">${{ product.price }}</span>
+              {% endif %}
+            </div>
+
+            <div class="product-card-actions">
+              <a href="{% url 'product_detail' slug=product.slug %}" class="btn btn-secondary btn-sm" id="viewDetailBtn-{{ product.id }}">
+                Details
+              </a>
+
+              <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST" class="ajax-add-to-cart">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-primary btn-sm btn-full" id="addToCartBtn-{{ product.id }}">
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Latest Arrivals Section -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Latest Arrivals</h2>
+        <p class="section-subtitle">Fresh additions to keep your style and setup ahead of the curve</p>
+      </div>
+      <a href="{% url 'product_list' %}?sort=newest" class="view-all-link">
+        View All New Arrivals <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="products-grid">
+      {% for product in new_arrivals %}
+        <div class="product-card" id="arrivalCard-{{ product.id }}">
+          <div class="product-thumb-wrap">
+            <div class="product-badges">
+              {% if product.discount_percentage > 0 %}
+                <span class="badge-discount">-{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+            </div>
+            <a href="{% url 'product_detail' slug=product.slug %}">
+              <img src="{{ product.get_image }}" alt="{{ product.name }}" class="product-thumb" loading="lazy">
+            </a>
+          </div>
+
+          <div class="product-info">
+            <div class="product-category-tag">{{ product.category.name }}</div>
+            <h3 class="product-title">
+              <a href="{% url 'product_detail' slug=product.slug %}">{{ product.name }}</a>
+            </h3>
+
+            <div class="product-rating">
+              <i class="bi bi-star-fill"></i>
+              <span class="rating-score">{{ product.rating }}</span>
+              <span class="rating-count">({{ product.review_count }})</span>
+            </div>
+
+            <div class="product-price-row">
+              <span class="price-current">${{ product.final_price }}</span>
+              {% if product.discount_price and product.discount_price < product.price %}
+                <span class="price-old">${{ product.price }}</span>
+              {% endif %}
+            </div>
+
+            <div class="product-card-actions">
+              <a href="{% url 'product_detail' slug=product.slug %}" class="btn btn-secondary btn-sm">
+                Details
+              </a>
+
+              <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST" class="ajax-add-to-cart">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-primary btn-sm btn-full">
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter Call to Action -->
+<section style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%); color: var(--white); padding: 4.5rem 0; margin-bottom: 2rem; border-radius: var(--radius-xl); margin-left: 1.5rem; margin-right: 1.5rem;">
+  <div class="container" style="text-align: center; max-width: 680px;">
+    <div style="display: inline-flex; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.1); align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1.25rem;">
+      <i class="bi bi-envelope-paper-heart"></i>
+    </div>
+    <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">Join the ShopEase VIP Club</h2>
+    <p style="font-size: 1.05rem; color: #C7D2FE; margin-bottom: 2rem;">
+      Subscribe to receive exclusive access to early product drops, limited secret flash sales, and a 15% discount code for your next order.
+    </p>
+
+    <form onsubmit="event.preventDefault(); showToast('🎉 Thank you for subscribing! Check your email for code VIP15.', 'success'); this.reset();" style="display: flex; gap: 0.6rem; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+      <input type="email" required placeholder="Enter your email address" style="flex: 1; min-width: 240px; padding: 0.85rem 1.25rem; border-radius: var(--radius-full); border: none; outline: none; font-size: 0.95rem;">
+      <button type="submit" class="btn btn-success" style="border-radius: var(--radius-full); padding: 0.85rem 1.6rem;">
+        Subscribe Now
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

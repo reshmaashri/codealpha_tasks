@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowSneak" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#EFF6FF"/>
+      <stop offset="100%" stop-color="#DBEAFE"/>
+    </radialGradient>
+    <filter id="sneakShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#1E3A8A" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowSneak)"/>
+  
+  <g filter="url(#sneakShadow)" transform="translate(60, 170)">
+    <!-- Thick Rubber Sole -->
+    <rect x="40" y="210" width="410" height="38" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="3"/>
+    <line x1="40" y1="225" x2="450" y2="225" stroke="#EF4444" stroke-width="3"/>
+    
+    <!-- Canvas Upper -->
+    <path d="M 40 210 C 40 140, 90 90, 160 90 L 260 140 C 340 150, 420 180, 450 210 Z" fill="#1E3A8A"/>
+    <!-- Rubber Toe Cap -->
+    <path d="M 400 210 C 430 200, 450 200, 450 210 Z" fill="#FFFFFF"/>
+    <path d="M 390 210 C 390 180, 430 180, 450 210 Z" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+
+    <!-- Ankle Star Badge -->
+    <circle cx="120" cy="140" r="28" fill="#FFFFFF"/>
+    <path d="M 120 124 L 124 135 L 135 135 L 126 142 L 130 153 L 120 146 L 110 153 L 114 142 L 105 135 L 116 135 Z" fill="#1E3A8A"/>
+
+    <!-- Clean White Laces -->
+    <line x1="190" y1="120" x2="230" y2="150" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+    <line x1="220" y1="140" x2="260" y2="165" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+    <line x1="250" y1="160" x2="290" y2="180" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

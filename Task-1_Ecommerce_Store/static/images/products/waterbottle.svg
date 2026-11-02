@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowBot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ECFDF5"/>
+      <stop offset="100%" stop-color="#D1FAE5"/>
+    </radialGradient>
+    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="40%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <filter id="botShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#064E3B" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowBot)"/>
+  
+  <g filter="url(#botShadow)" transform="translate(200, 60)">
+    <!-- Loop Cap Handle -->
+    <path d="M 70 50 C 70 10, 130 10, 130 50" fill="none" stroke="#0F172A" stroke-width="16" stroke-linecap="round"/>
+    <!-- Stainless Cap -->
+    <rect x="65" y="50" width="70" height="35" rx="8" fill="#334155"/>
+    <rect x="75" y="85" width="50" height="15" fill="#64748B"/>
+
+    <!-- Bottle Neck -->
+    <path d="M 70 100 L 130 100 L 160 150 L 40 150 Z" fill="url(#steel)"/>
+
+    <!-- Main Insulated Cylinder Body -->
+    <rect x="40" y="150" width="120" height="310" rx="20" fill="url(#steel)"/>
+    
+    <!-- Light Reflection Strip -->
+    <rect x="60" y="150" width="14" height="300" rx="7" fill="#FFFFFF" fill-opacity="0.25"/>
+
+    <!-- Temperature Display Ring -->
+    <rect x="65" y="240" width="70" height="30" rx="15" fill="#064E3B"/>
+    <text x="100" y="261" fill="#6EE7B7" font-family="system-ui, sans-serif" font-weight="700" font-size="14" text-anchor="middle">5°C COLD</text>
+  </g>
+</svg>

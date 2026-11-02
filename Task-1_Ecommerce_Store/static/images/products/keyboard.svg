@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlowKb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FAF5FF"/>
+      <stop offset="100%" stop-color="#F3E8FF"/>
+    </radialGradient>
+    <linearGradient id="rgbBorder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <filter id="kbShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#581C87" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="600" height="600" rx="32" fill="url(#bgGlowKb)"/>
+  
+  <g filter="url(#kbShadow)" transform="translate(60, 160)">
+    <!-- Base Plate with RGB Rim -->
+    <rect x="0" y="0" width="480" height="260" rx="20" fill="url(#rgbBorder)"/>
+    <rect x="6" y="6" width="468" height="248" rx="16" fill="#0F172A"/>
+
+    <!-- Keycap Matrix Rows -->
+    <!-- Row 1 -->
+    <g fill="#1E293B" stroke="#334155" stroke-width="1.5">
+      <rect x="25" y="25" width="30" height="30" rx="5" fill="#EF4444"/>
+      <rect x="62" y="25" width="28" height="30" rx="5"/>
+      <rect x="96" y="25" width="28" height="30" rx="5"/>
+      <rect x="130" y="25" width="28" height="30" rx="5"/>
+      <rect x="164" y="25" width="28" height="30" rx="5"/>
+      <rect x="198" y="25" width="28" height="30" rx="5"/>
+      <rect x="232" y="25" width="28" height="30" rx="5"/>
+      <rect x="266" y="25" width="28" height="30" rx="5"/>
+      <rect x="300" y="25" width="28" height="30" rx="5"/>
+      <rect x="334" y="25" width="28" height="30" rx="5"/>
+      <rect x="368" y="25" width="28" height="30" rx="5"/>
+      <rect x="402" y="25" width="53" height="30" rx="5" fill="#3B82F6"/>
+
+      <!-- Row 2 -->
+      <rect x="25" y="62" width="42" height="30" rx="5"/>
+      <rect x="73" y="62" width="28" height="30" rx="5"/>
+      <rect x="107" y="62" width="28" height="30" rx="5"/>
+      <rect x="141" y="62" width="28" height="30" rx="5"/>
+      <rect x="175" y="62" width="28" height="30" rx="5"/>
+      <rect x="209" y="62" width="28" height="30" rx="5"/>
+      <rect x="243" y="62" width="28" height="30" rx="5"/>
+      <rect x="277" y="62" width="28" height="30" rx="5"/>
+      <rect x="311" y="62" width="28" height="30" rx="5"/>
+      <rect x="345" y="62" width="28" height="30" rx="5"/>
+      <rect x="379" y="62" width="28" height="30" rx="5"/>
+      <rect x="413" y="62" width="42" height="30" rx="5"/>
+
+      <!-- Row 3 Home Row -->
+      <rect x="25" y="99" width="50" height="30" rx="5"/>
+      <rect x="81" y="99" width="28" height="30" rx="5"/>
+      <rect x="115" y="99" width="28" height="30" rx="5"/>
+      <rect x="149" y="99" width="28" height="30" rx="5"/>
+      <rect x="183" y="99" width="28" height="30" rx="5"/>
+      <rect x="217" y="99" width="28" height="30" rx="5"/>
+      <rect x="251" y="99" width="28" height="30" rx="5"/>
+      <rect x="285" y="99" width="28" height="30" rx="5"/>
+      <rect x="319" y="99" width="28" height="30" rx="5"/>
+      <rect x="353" y="99" width="28" height="30" rx="5"/>
+      <rect x="387" y="99" width="68" height="30" rx="5" fill="#8B5CF6"/>
+
+      <!-- Row 4 Spacebar Row -->
+      <rect x="25" y="136" width="60" height="30" rx="5"/>
+      <rect x="91" y="136" width="28" height="30" rx="5"/>
+      <rect x="125" y="136" width="28" height="30" rx="5"/>
+      <rect x="159" y="136" width="28" height="30" rx="5"/>
+      <rect x="193" y="136" width="28" height="30" rx="5"/>
+      <rect x="227" y="136" width="28" height="30" rx="5"/>
+      <rect x="261" y="136" width="28" height="30" rx="5"/>
+      <rect x="295" y="136" width="28" height="30" rx="5"/>
+      <rect x="329" y="136" width="28" height="30" rx="5"/>
+      <rect x="363" y="136" width="92" height="30" rx="5"/>
+
+      <!-- Spacebar -->
+      <rect x="135" y="173" width="190" height="32" rx="6" fill="#6366F1"/>
+      <rect x="25" y="173" width="45" height="32" rx="6"/>
+      <rect x="76" y="173" width="45" height="32" rx="6"/>
+      <rect x="339" y="173" width="45" height="32" rx="6"/>
+      <rect x="390" y="173" width="65" height="32" rx="6"/>
+    </g>
+  </g>
+</svg>
